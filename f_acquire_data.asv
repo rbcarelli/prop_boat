@@ -1,0 +1,31 @@
+
+function f_acquire_data()
+    f_reset_plots()
+    sample_rate = 100;                              %samples per second
+    transfer_rate = 10                              %data transfer per second
+    packet_size = sample_rate * transfer_rate;      %data points per transfer
+    
+    array_size = 5000;
+    data_received = 0;
+    raw_thrust = zeros(array_size, 1);
+    raw_torque = zeros(array_size, 1);
+    raw_rpm = zeros(array_size, 1);
+    time = zeros(array_size, 1);
+     
+    global enable_acquire raw_thrust raw_torque raw_rpm program_running...
+        time daq
+
+    daq.startBackground();  %start recording on DAQ
+    
+    while enable_acquire && program_running
+        f_plot_data([raw_thrust raw_torque],time,[2 2 1])
+        f_plot_data(raw_rpm,time,2 2 2])        
+        pause(.1)
+    end   
+    
+    daq
+    
+end
+
+
+

@@ -1,19 +1,28 @@
-funtion isr_get_new_data()
-    daq.wait()  %wait until there are 2000 values
-    new_thrust = 2-.2*randn(packet_size, 1);
-    new_torque = 1+.2*randn(packet_size, 1);
-    new_rpm = f_acquire_rpm(sample_rate);
-    if data_received >= array_size % only when out of space
-        raw_thrust = vertcat(raw_thrust, zeros(array_size, 1));
-        raw_torque = vertcat(raw_torque, zeros(array_size, 1));
-        raw_rpm = vertcat(raw_rpm, zeros(array_size, 1));
-        array_size = array_size * 2;
-        t_end = (array_size-1)/sample_rate;
-        time = 0 : 1/sample_rate : t_end;
+funtion isr_get_new_data(src,event)
+
+    global raw_thrust raw_torque raw_rpm time data_received ...
+        program_running enable_acquire packet_size
+
+    if program_running && enable_acquire
+
+        array_size = length(time);  %change this to be 10*packetsize
+
+        data_received = data_received + packet_size;
+        
+        if data_received >= array_size % only when out of space
+            raw_thrust = vertcat(raw_thrust, zeros(10*packet_size, 1));
+            raw_torque = vertcat(raw_torque, zeros(10*packet_size, 1));
+            raw_rpm = vertcat(raw_rpm, zeros(10*packet_size, 1));
+            time = vertcat(time, zeros(10*packet_size, 1));
+        end
+
+        raw_thrust(data_received+1:data_received+packet_size) = event.Data(:,1);
+        raw_torque(data_received+1:data_received+packet_size) = event.Data(:,2);
+        time(data_received+1:data_received+packet_size) = event.TimeStamps;
+        raw_rpm(data_received+1:data_received+packet_size) = f_acquire_rpm();
+
+    else
+        src.stop()
     end
-    raw_thrust(data_received+1:data_received+packet_size) = new_thrust;
-    raw_torque(data_received+1:data_received+packet_size) = new_torque;
-    size(new_rpm)
-    raw_rpm(data_received+1:data_received+packet_size) = new_rpm;
-    data_received = data_received + packet_size;
+
 end

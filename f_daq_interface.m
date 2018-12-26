@@ -1,23 +1,19 @@
-%see connected devices
-devices = daq.getDevices
+function f_configure_daq
 
-%display info about daq in position num_daq
-devices(num_daq)
+    global packet_size daq sample_rate
 
-%add daq to system
-s = daq.createSession('ni');    
+    % prompt = {'Input data rate'};
+    % title = 'Serial Port';
+    % dims = [1 30];
+    % definput = {'COM'};
+    % serial_port = string(inputdlg(prompt,title,dims,definput))
 
-%add channel for colleciton
-addAnalogInputChannel(s,'cDAQ1Mod4', 0, 'Voltage');
-addAnalogInputChannel(s,'cDAQ1Mod4', 1, 'Voltage');    
+    daq = daq.createSession('ni');
+    addAnalogInputChannel(daq,'cDAQ1Mod1', 0, 'Voltage');
+    sample_rate = 2000
+    daq.Rate = sample_rate;
 
-%samples collected/sec
-s.Rate = 8000         
+    packet_size = 5000;         %set this with a prompt
+    daq.NotifyWhenDataAvailableExceeds = packet_size;
 
-%%
-
-s = daq.createSession('ni');
-addAnalogInputChannel(s,'cDAQ1Mod1', 0, 'Voltage');
-s.Rate = 2000;
-s.DurationInSeconds = 5;
-s
+end
