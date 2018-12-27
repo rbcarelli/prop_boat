@@ -17,8 +17,8 @@ panel = uipanel('Position',[.001 .001 .1 .35]);
 
 btn_configure_daq = uicontrol(panel,'Style','togglebutton');
 btn_configure_daq.String = 'Configure DAQ';
-btn_configure_daq.Callback = @f_configure_daq;
-set(btn_configure_daq,'Position',[10 180 100 25])
+btn_acquire_enable.Callback = @f_configure_daq;
+set(btn_acquire_enable,'Position',[10 180 100 25])
 
 btn_acquire_enable = uicontrol(panel,'Style','togglebutton');
 btn_acquire_enable.String = 'Start/Stop';
