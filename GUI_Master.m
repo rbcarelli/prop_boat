@@ -2,7 +2,7 @@ clc
 close all
 clear all
 
-global enable_acquire program_running
+global enable_acquire program_running daq_status
 
 enable_acquire = false;
 program_running = true;

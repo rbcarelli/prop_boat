@@ -11,6 +11,7 @@ function f_serial_port_open(~,~)
     definput = {'COM'};
     serial_port = string(inputdlg(prompt,title,dims,definput))
 
+    f = waitbar(0,'Opening Serial Port')
     port = serial(serial_port);
 %     set(port,'BaudRate',9600);
     fopen(port);

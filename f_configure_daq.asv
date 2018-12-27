@@ -9,13 +9,17 @@ function f_configure_daq(~,~)
     % serial_port = string(inputdlg(prompt,title,dims,definput))
 
     fprintf('Configuring DAQ\r')
-      
-    f = waitbar(0,'Configuring DAQ');
+    
+    set(handles.figure1, 'pointer', 'watch')
+    drawnow;
+    
+    f waitbar(0,'Configuring DAQ')
     
     mydaq = daq.createSession('ni');
     addAnalogInputChannel(mydaq,'Dev1', 0, 'Voltage');
     addAnalogInputChannel(mydaq,'Dev1', 1, 'Voltage');
     addAnalogInputChannel(mydaq,'Dev1', 2, 'Voltage');
+    f waitbar(0.5,'Configuring DAQ')
     sample_rate = 2000;
     mydaq.Rate = sample_rate;
     mydaq.IsContinuous = true;
@@ -23,8 +27,7 @@ function f_configure_daq(~,~)
     packet_size = 2000;         %set this with a prompt
     mydaq.NotifyWhenDataAvailableExceeds = packet_size;
  
-    close(f)
-    
     fprintf('DAQ configured\r')
     
+    set(handles.figure1, 'pointer', 'arrow')
 end
