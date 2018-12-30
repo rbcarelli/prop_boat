@@ -16,11 +16,10 @@ function f_acquire_data()
     
     while enable_acquire && program_running
         fprintf('While loop: Scans acquired = %d\n', mydaq.ScansAcquired)
-        f_plot_data([raw_thrust raw_torque],time,[2 2 1])
+        f_plot_data([raw_thrust raw_torque],time,[2 2 1],[.15 .65 .35 .3])
         %rpm = tachorpm(raw_rpm, sample_rate);
-        f_plot_data(raw_rpm,time,[2 2 2])        
+        f_plot_data(raw_rpm,time,[2 2 2],[.6 .65 .3 .3])        
         pause(.1)
-        
     end   
     
     text = strcat('Input advance ratio');
@@ -30,7 +29,7 @@ function f_acquire_data()
     definput = {''};
     advance_ratio = string(inputdlg(prompt,title,dims,definput));
     
-    filename = strcat('C:\Users\rbcar\Documents\MIT\~Thesis\Data\',advance_ratio)
+    filename = strcat('C:\Users\rbcar\Documents\MIT\~Thesis\Data\',advance_ratio);
     data = [time raw_thrust raw_torque raw_rpm];
     csvwrite(filename, data)
     

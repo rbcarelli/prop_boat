@@ -17,15 +17,11 @@ function isr_get_new_data(src,event)
             time = vertcat(time, zeros(10*packet_size, 1));
         end
         
-        size(event.Data)
         raw_thrust(data_received-packet_size+1:data_received) = event.Data(:,1);
         raw_torque(data_received-packet_size+1:data_received) = event.Data(:,2);
         time(data_received-packet_size+1:data_received) = event.TimeStamps;
         raw_rpm(data_received-packet_size+1:data_received) = event.Data(:,3);
-        
-        raw_thrust(1:100)
-        time(1:100)
-        
+                
     else
         fprintf('ISR Stopped')
         src.stop()

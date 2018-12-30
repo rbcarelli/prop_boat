@@ -13,13 +13,13 @@ global raw_thrust raw_torque raw_rpm time program_running
     f_plot_data([valuable_rpm],valuable_time,[2 2 4],[.6 .25 .3 .3])
     mean_val = sum(valuable_thrust)/length(valuable_thrust);
     
-    sliders()
-    function sliders()
+    sliders
+    function sliders
 
         f = figure(1);
         bgcolor = f.Color;                              %L B W H
         thrust_smoothing = uicontrol('Parent',f,'Style','slider','Position',[250,90,400,20],...
-                  'value',1, 'min',1, 'max',100);
+                  'value',0, 'min',0, 'max',100);
          bl1 = uicontrol('Parent',f,'Style','text','Position',[230,85,23,23],...
                     'String','0','BackgroundColor',bgcolor);
          bl2 = uicontrol('Parent',f,'Style','text','Position',[655,85,23,23],...
@@ -28,7 +28,7 @@ global raw_thrust raw_torque raw_rpm time program_running
                     'String','Thrust Smoothing','BackgroundColor',bgcolor);
 
         torque_smoothing = uicontrol('Parent',f,'Style','slider','Position',[250,50,400,20],...
-                  'value',1, 'min',1, 'max',100);
+                  'value',0, 'min',0, 'max',100);
          bl1 = uicontrol('Parent',f,'Style','text','Position',[230,45,23,23],...
                     'String','0','BackgroundColor',bgcolor);
          bl2 = uicontrol('Parent',f,'Style','text','Position',[655,45,23,23],...
@@ -40,24 +40,27 @@ global raw_thrust raw_torque raw_rpm time program_running
     addlistener(thrust_smoothing, 'Value', 'PostSet', @callbackfn_thrust);
     addlistener(torque_smoothing, 'Value', 'PostSet', @callbackfn_torque);
     
-    smoothed_thrust = valuable_thrust;
-    smoothed_torque = valuable_torque;
+    num_thrust = 0;
+    num_torque = 0;
+    
+%     while program_running && num_thrust>0 && num_torque>0  
+%         
+%         f_plot_data([smoothed_thrust smoothed_torque],valuable_time,[2 2 3],[.15 .25 .35 .3])
+%         pause(0.1)
+%         
+%     end
         
-    function callbackfn_thrust(~, eventdata)
-       num_thrust = get(eventdata.AffectedObject, 'Value');
-       smoothed_thrust = smoothdata(valuable_thrust,'movmean',num_thrust);
-       plot_trimmed_data()  
+    function callbackfn_thrust(src, eventdata)
+        num_thrust = get(eventdata.AffectedObject, 'Value')
+        smoothed_thrust = smoothdata(valuable_thrust,'movmean',num_thrust);
+%         f_plot_data(smoothed_thrust,valuable_time,[2 2 3],[.15 .25 .35 .3])
     end     
 
-    function callbackfn_torque(~, eventdata)
-       num_torque = get(eventdata.AffectedObject, 'Value');
-       smoothed_torque = smoothdata(valuable_torque,'movmean',num_torque);
-       plot_trimmed_data()
+    function callbackfn_torque(src, eventdata)
+        num_torque = get(eventdata.AffectedObject, 'Value')
+        smoothed_torque = smoothdata(valuable_torque,'movmean',num_torque);
+%         f_plot_data(smoothed_torque,valuable_time,[2 2 3],[.15 .25 .35 .3])
     end  
-
-    function plot_trimmed_data()
-       f_plot_data([smoothed_thrust smoothed_torque],valuable_time,[2 2 3],[.15 .25 .35 .3])        
-    end
 
 end
 
