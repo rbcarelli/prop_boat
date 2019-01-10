@@ -1,4 +1,4 @@
 function f_reset(~,~)
     global port
-    fprintf(port,'port.WriteLine("reset")')
+    fprintf(port,'reset')
 end

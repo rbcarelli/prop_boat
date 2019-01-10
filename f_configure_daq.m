@@ -2,25 +2,23 @@ function f_configure_daq(~,~)
 
     global packet_size mydaq sample_rate
 
-    % prompt = {'Input data rate'};
-    % title = 'Serial Port';
-    % dims = [1 30];
-    % definput = {'COM'};
-    % serial_port = string(inputdlg(prompt,title,dims,definput))
-
+    prompt1 = {'Device Name','Input sample rate'};
+    title = 'DAQ Configuration';
+    dims = [1 50];
+    definput = {'DEV1','9600'};
+    input = string(inputdlg(prompt1,title,dims,definput))
+    
     fprintf('Configuring DAQ\r')
       
     f = waitbar(0,'Configuring DAQ');
     
     mydaq = daq.createSession('ni');
-    addAnalogInputChannel(mydaq,'Dev1', 0, 'Voltage');
-    addAnalogInputChannel(mydaq,'Dev1', 1, 'Voltage');
-    addAnalogInputChannel(mydaq,'Dev1', 2, 'Voltage');
+    addAnalogInputChannel(mydaq,input(1), [1 2 3], 'Voltage');
     sample_rate = 2000;
     mydaq.Rate = sample_rate;
     mydaq.IsContinuous = true;
 
-    packet_size = 2000;         %set this with a prompt
+    packet_size = sample_rate;         %set this with a prompt
     mydaq.NotifyWhenDataAvailableExceeds = packet_size;
  
     close(f)

@@ -1,6 +1,6 @@
 function isr_get_new_data(src,event)
 
-    fprintf('ISR Called')
+    fprintf('ISR Called \n')
     
     global raw_thrust raw_torque raw_rpm time ...
         program_running enable_acquire packet_size mydaq

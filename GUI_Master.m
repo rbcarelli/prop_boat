@@ -6,7 +6,7 @@ global enable_acquire program_running daq_status
 
 enable_acquire = false;
 program_running = true;
-
+    
 %f = figure('Position',[50 100 1200 600]);
 f = figure(1);
 set(f, 'Position',[50 100 1400 650]);
@@ -51,9 +51,9 @@ function closereq(~, ~)
     global program_running port 
     close all
     program_running=false;
-    port_exists = exist (port);
-    if port_exists
+%     port_exists = exist (port);
+%     if port_exists
         fclose(port);
-    end
+%     end
     
 end
