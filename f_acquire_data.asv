@@ -14,7 +14,7 @@ function f_acquire_data()
     mydaq.startBackground();  %start recording on DAQ
     load tacho 
     
-    tq_axis = [-10 10];
+    tq_axis = [-1 1];
     rpm_axis = [0 600];
     
     while enable_acquire && program_running
@@ -37,7 +37,7 @@ function f_acquire_data()
         end
 
         
-        rpm_position = [.85 .68 .05 .02];
+        rpm_position = [.85 .7 .05 .02];
         rpm_textbox = uicontrol('Style', 'text', 'Units', 'norm', 'Position', rpm_position);
         set(rpm_textbox, 'String', rpm_instantaneous,'BackgroundColor','w');
         

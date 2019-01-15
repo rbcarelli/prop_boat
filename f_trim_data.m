@@ -1,5 +1,5 @@
 function f_trim_data(~,~)
-global raw_thrust raw_torque raw_rpm time program_running
+global raw_thrust raw_torque raw_rpm time program_running tq_axis rpm_axis
     y=0;
     [x,y] = ginput;
     [~, idx1] = min(abs(time-x(1)));
@@ -9,8 +9,10 @@ global raw_thrust raw_torque raw_rpm time program_running
     valuable_rpm = raw_rpm(idx1:idx2);
     valuable_time = time(idx1:idx2);
     figure(1)
-    f_plot_data([valuable_thrust valuable_torque],valuable_time,[2 2 3], [.15 .25 .35 .3])
-    f_plot_data([valuable_rpm],valuable_time,[2 2 4],[.6 .25 .3 .3])
+    f_plot_data([valuable_thrust valuable_torque],valuable_time,...
+        ["2" "2" "3"], [.15 .25 .35 .3],tq_axis)
+    f_plot_data([valuable_rpm],valuable_time,...
+        ["2" "2" "4"],[.6 .25 .3 .3],rpm_axis)
     mean_val = sum(valuable_thrust)/length(valuable_thrust);
     
     %Defining Sliders
@@ -87,7 +89,8 @@ global raw_thrust raw_torque raw_rpm time program_running
     end  
 
     function plot_trimmed_data()
-       f_plot_data([smoothed_thrust smoothed_torque],valuable_time,[2 2 3],[.15 .25 .35 .3])        
+       f_plot_data([smoothed_thrust smoothed_torque],valuable_time,...
+           ["2" "2" "3"],[.15 .25 .35 .3], tq_axis)        
     end
 
 end
