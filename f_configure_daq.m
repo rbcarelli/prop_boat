@@ -2,11 +2,11 @@ function f_configure_daq(~,~)
 
     global packet_size mydaq sample_rate
 
-    prompt1 = {'Device Name','Input sample rate'};
+    prompt1 = {'Device Name','Input baudrate','Input Sample Rate'};
     title = 'DAQ Configuration';
     dims = [1 50];
-    definput = {'DEV1','9600'};
-    input = string(inputdlg(prompt1,title,dims,definput))
+    definput = {'DEV1','9600','500'};
+    input = string(inputdlg(prompt1,title,dims,definput));
     
     fprintf('Configuring DAQ\r')
       
@@ -14,7 +14,8 @@ function f_configure_daq(~,~)
     
     mydaq = daq.createSession('ni');
     addAnalogInputChannel(mydaq,input(1), [1 2 3], 'Voltage');
-    sample_rate = 2000;
+    addAnalogOutputChannel(mydaq,input(1),0,'Voltage');
+    sample_rate = str2num(input(3));
     mydaq.Rate = sample_rate;
     mydaq.IsContinuous = true;
 

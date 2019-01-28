@@ -1,16 +1,23 @@
 function f_trim_data(~,~)
-global raw_thrust raw_torque raw_rpm time program_running tq_axis rpm_axis
+global raw_thrust raw_torque raw_rpm time program_running tq_axis rpm_axis sample_rate
+    
+%     load tacho
+    
     y=0;
     [x,y] = ginput;
     [~, idx1] = min(abs(time-x(1)));
     [~, idx2] = min(abs(time-x(2)));
     valuable_thrust = raw_thrust(idx1:idx2);
     valuable_torque = raw_torque(idx1:idx2);
-    valuable_rpm = raw_rpm(idx1:idx2);
+    rpm_calc = raw_rpm(idx1:idx2);
     valuable_time = time(idx1:idx2);
     figure(1)
     f_plot_data([valuable_thrust valuable_torque],valuable_time,...
         ["2" "2" "3"], [.15 .25 .35 .3],tq_axis)
+    
+%     valuable_rpm = tachorpm(rpm_calc,sample_rate);
+    valuable_rpm = mean(rpm_calc);
+
     f_plot_data([valuable_rpm],valuable_time,...
         ["2" "2" "4"],[.6 .25 .3 .3],rpm_axis)
     mean_val = sum(valuable_thrust)/length(valuable_thrust);
@@ -22,7 +29,7 @@ global raw_thrust raw_torque raw_rpm time program_running tq_axis rpm_axis
         f = figure(1);
         bgcolor = f.Color;                              %L B W H
         thrust_smoothing = uicontrol('Parent',f,'Style','slider','Position',[250,90,400,20],...
-                  'value',100, 'min',1, 'max',500);
+                  'value',100, 'min',1, 'max',1500);
          bl1 = uicontrol('Parent',f,'Style','text','Position',[230,85,23,23],...
                     'String','1','BackgroundColor',bgcolor);
          bl2 = uicontrol('Parent',f,'Style','text','Position',[655,85,23,23],...
@@ -31,7 +38,7 @@ global raw_thrust raw_torque raw_rpm time program_running tq_axis rpm_axis
                     'String','Thrust Smoothing','BackgroundColor',bgcolor);
 
         torque_smoothing = uicontrol('Parent',f,'Style','slider','Position',[250,50,400,20],...
-                  'value',100, 'min',1, 'max',500);
+                  'value',100, 'min',1, 'max',1500);
          bl1 = uicontrol('Parent',f,'Style','text','Position',[230,45,23,23],...
                     'String','1','BackgroundColor',bgcolor);
          bl2 = uicontrol('Parent',f,'Style','text','Position',[655,45,23,23],...
